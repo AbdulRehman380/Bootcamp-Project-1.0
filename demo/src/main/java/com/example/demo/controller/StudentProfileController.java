@@ -6,33 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/studentprofile")
 public class StudentProfileController {
 
-    private StudentProfileService studentProfileService;
+    private final StudentProfileService studentProfileService;
+
     @Autowired
     public StudentProfileController(StudentProfileService studentProfileService) {
         this.studentProfileService = studentProfileService;
     }
 
-    @PostMapping("/studentprofile/create")
+    // CREATE
+    @PostMapping("/create")
     public String create(@RequestBody StudentProfile studentProfile) {
         studentProfileService.createStudentProfile(studentProfile);
         return "Student profile is successfully stored";
     }
-    //path variable
-    @GetMapping("/studentprofile/{studentId}")
+
+    // READ
+    @GetMapping("/{studentId}")
     public StudentProfile get(@PathVariable Long studentId) {
         return studentProfileService.getStudentProfileById(studentId);
     }
-    @DeleteMapping("/studentprofile/delete")
-    public String delete(@RequestBody StudentProfile studentProfile){
-        studentProfileService.delete(StudentProfile);
+
+    // DELETE
+    @DeleteMapping("/delete/{studentId}")
+    public String delete(@PathVariable Long studentId) {
+        studentProfileService.delete(studentId);
         return "Student profile is successfully deleted";
     }
-    @PutMapping("/studentprofile/update")
-    public String update(@RequestBody StudentProfile studentProfile){
-        studentProfileService.update(studentId);
 
+    // UPDATE
+    @PutMapping("/update/{studentId}")
+    public String update(@PathVariable Long studentId, @RequestBody StudentProfile studentProfile) {
+        studentProfileService.updateStudentProfile(studentId, studentProfile);
+        return "Student profile is successfully updated";
     }
-
 }
